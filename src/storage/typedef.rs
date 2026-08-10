@@ -1,11 +1,12 @@
+use crate::storage::grid::Grid;
 pub struct Simulation<T> {
-    pub grid: Vec<Vec<T>>,
+    pub grid: Grid<T>,
     pub step: usize,
     pub completed: bool,
 }
 
 impl<T> Simulation<T> {
-    pub fn new(grid: Vec<Vec<T>>) -> Simulation<T> {
+    pub fn new(grid: Grid<T>) -> Simulation<T> {
         Simulation {grid, step: 0, completed: false}
     }
 }
@@ -22,16 +23,21 @@ impl<T> Game<T> {
     }
 }
 
-pub trait Playable {
+pub trait Playable: Simulable {
     type Action;
-    fn step_turn(&mut self, _: Self::Action);
+    fn step_turn(&mut self, action: Self::Action) {
+        self.apply_action(action);
+        self.step();
+    }
+    fn get_action(&mut self) -> Self::Action;
+    fn apply_action(&mut self, _: Self::Action);
     fn win_condition(&mut self);
-    fn is_over(&self) -> bool;
     fn winner(&self) -> usize;
 }
 
 pub trait Simulable {
-    fn step_turn(&mut self);
+    fn step(&mut self);
+    fn display(&self);
     fn is_over(&self) -> bool;
 }
 
@@ -47,6 +53,6 @@ pub struct TicTacToe {
 
 impl TicTacToe {
     pub fn new() -> TicTacToe {
-        TicTacToe { game: Game::new(Simulation::new(vec![vec![TripleT::Empty; 3]; 3]), 2) }
+        TicTacToe { game: Game::new(Simulation::new(Grid::from_vec(vec![vec![TripleT::Empty; 3]; 3])), 2) }
     }
 }
