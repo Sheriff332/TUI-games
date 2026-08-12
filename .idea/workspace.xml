@@ -11,12 +11,11 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="feat: TUI init">
-      <change afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="refactor(io)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/inputs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/tui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/tui.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/logic/game_run.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/game_run.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/logic/tictactoe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/tictactoe.rs" afterDir="false" />
@@ -147,7 +146,8 @@
     <MESSAGE value="init" />
     <MESSAGE value="feat: basic grid implementation" />
     <MESSAGE value="feat: TUI init" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: TUI init" />
+    <MESSAGE value="refactor(io): types and function refactoring for io support" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor(io): types and function refactoring for io support" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

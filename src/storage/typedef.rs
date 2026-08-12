@@ -1,10 +1,73 @@
 use crate::storage::grid::Grid;
+use crossterm::event::KeyEvent;
 use enum_dispatch::enum_dispatch;
 use ratatui::prelude::*;
+use ratatui::widgets::ListState;
 
 pub struct App {
     pub exit: bool,
     pub current_game: Option<CurrentGame>,
+    pub selected_game: CurrentGame,
+    pub current_menu: CurrentMenu,
+    pub list_state: ListState,
+}
+
+impl App {
+    pub fn next_item(&mut self) {
+        let i = match self.list_state.selected() {
+            Some(i) => {
+                if i >= NAMES.len() - 1 {
+                    0
+                } else {
+                    i + 1
+                }
+            }
+            None => 0,
+        };
+        self.list_state.select(Some(i));
+    }
+
+    pub fn prev_item(&mut self) {
+        let i = match self.list_state.selected() {
+            Some(i) => {
+                if i == 0 {
+                    NAMES.len() - 1
+                } else {
+                    i - 1
+                }
+            }
+            None => 0,
+        };
+        self.list_state.select(Some(i));
+    }
+}
+
+#[derive(PartialEq)]
+pub enum CurrentMenu {
+    Left,
+    Right,
+    Status,
+}
+
+impl CurrentMenu {
+    pub fn next(&mut self) {
+        *self = {
+            match self {
+                CurrentMenu::Left => CurrentMenu::Right,
+                CurrentMenu::Right => CurrentMenu::Status,
+                CurrentMenu::Status => CurrentMenu::Left,
+            }
+        };
+    }
+    pub fn previous(&mut self) {
+        *self = {
+            match self {
+                CurrentMenu::Left => CurrentMenu::Status,
+                CurrentMenu::Right => CurrentMenu::Left,
+                CurrentMenu::Status => CurrentMenu::Right,
+            }
+        };
+    }
 }
 
 pub struct Simulation<T> {
@@ -41,12 +104,11 @@ impl<T> Game<T> {
 
 #[enum_dispatch]
 pub trait Playable: Simulable {
-    type Action;
-    fn step_turn(&mut self, action: Self::Action) {
+    fn step_turn(&mut self, action: KeyEvent) {
         self.handle_input(action);
         self.step();
     }
-    fn handle_input(&mut self, _: Self::Action);
+    fn handle_input(&mut self, _: KeyEvent);
     fn win_condition(&mut self);
     fn winner(&self) -> usize;
 }
@@ -59,8 +121,19 @@ pub trait Simulable {
 }
 
 #[enum_dispatch(Simulable)]
+#[enum_dispatch(Playable)]
 pub enum CurrentGame {
     TicTacToe(TicTacToe),
+}
+
+pub const NAMES: [&str; 1] = ["TicTacToe"];
+
+impl CurrentGame {
+    pub fn name(&self) -> &str {
+        match &self {
+            CurrentGame::TicTacToe(_) => NAMES[0],
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -70,14 +143,12 @@ pub enum TripleT {
     Empty,
 }
 pub struct TicTacToe {
-    pub name: String,
     pub game: Game<TripleT>,
 }
 
 impl TicTacToe {
     pub fn new() -> TicTacToe {
         TicTacToe {
-            name: "TicTacToe".to_string(),
             game: Game::new(
                 Simulation::new(Grid::from_vec(vec![vec![TripleT::Empty; 3]; 3])),
                 2,

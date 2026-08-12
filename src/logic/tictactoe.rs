@@ -1,18 +1,18 @@
 use crate::storage::typedef::*;
+use crossterm::event::KeyEvent;
 use ratatui::prelude::*;
 impl Playable for TicTacToe {
-    type Action = (TripleT, usize, usize);
-    fn step_turn(&mut self, action: Self::Action) {
-        self.game
-            .sim
-            .grid
-            .set(action.1, action.2, action.0)
-            .expect("Failed to step turn");
+    fn step_turn(&mut self, action: KeyEvent) {
+        // self.game
+        //     .sim
+        //     .grid
+        //     .set(action.1, action.2, action.0)
+        //     .expect("Failed to step turn");
         self.win_condition();
         self.game.sim.step += 1;
     }
 
-    fn handle_input(&mut self, _: Self::Action) {
+    fn handle_input(&mut self, _: KeyEvent) {
         todo!()
     }
 

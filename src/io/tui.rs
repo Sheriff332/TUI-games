@@ -1,51 +1,87 @@
 use crate::io::inputs::handle_events;
-use crate::storage::typedef::Simulable;
 use crate::storage::typedef::{App, CurrentGame};
-use ratatui::Frame;
+use crate::storage::typedef::{CurrentMenu, NAMES, Simulable};
+use chrono::Local;
 use ratatui::prelude::*;
-use ratatui::widgets::{Block, Paragraph};
+use ratatui::widgets::List;
+use ratatui::widgets::{Block, ListItem, Paragraph};
 
 impl App {
     pub fn run(&mut self, term: &mut ratatui::DefaultTerminal) -> std::io::Result<()> {
         while !self.exit {
-            term.draw(|frame| self.render(frame))?;
-            if handle_events()? {
+            (&mut *term).draw(|frame| {
+                frame.render_widget(&mut *self, frame.area());
+            })?;
+            if handle_events(self)? {
                 break;
             }
         }
         Ok(())
     }
-
-    fn render(&self, frame: &mut Frame) {
-        frame.render_widget(self, frame.area());
-    }
 }
 
-impl Widget for &App {
+impl Widget for &mut App {
     fn render(self, area: Rect, buf: &mut Buffer)
     where
         Self: Sized,
     {
         use Constraint::{Length, Min};
+        let name = if let Some(game) = &self.current_game {
+            game.name()
+        } else {
+            ""
+        };
 
         let vertical = Layout::vertical([Min(0), Length(3)]);
         let [main_area, status_area] = vertical.areas(area);
         let horizontal = Layout::horizontal([Length(40), Min(0)]);
         let [left_area, right_area] = horizontal.areas(main_area);
-        let status_block = Block::bordered().title("Status Bar");
-        let left_block = Block::bordered().title("Left");
-        let right_block = Block::bordered().title("Right");
+
+        let (left_block, right_block, status_block): (Block, Block, Block);
+        if self.current_menu == CurrentMenu::Left {
+            left_block = Block::bordered()
+                .border_style(Color::Rgb(255, 215, 0))
+                .title("Game List");
+        } else {
+            left_block = Block::bordered().title("Game List");
+        }
+        if self.current_menu == CurrentMenu::Right {
+            right_block = Block::bordered()
+                .border_style(Color::Rgb(255, 215, 0))
+                .title(name);
+        } else {
+            right_block = Block::bordered().title("Game");
+        }
+        if self.current_menu == CurrentMenu::Status {
+            status_block = Block::bordered()
+                .border_style(Color::Rgb(255, 215, 0))
+                .title("Status");
+        } else {
+            status_block = Block::bordered().title("Status");
+        }
+
         let status_iarea = status_block.inner(status_area);
         let left_iarea = left_block.inner(left_area);
         let right_iarea = right_block.inner(right_area);
+
         status_block.render(status_area, buf);
-        Line::from("Process Overview").render(status_iarea, buf);
-        Line::from("This is the Game List").render(left_iarea, buf);
-        Line::from("This is the Game Render").render(right_iarea, buf);
+        Line::from(name).render(status_iarea, buf);
+        Line::from(format!("{}", Local::now().format("%H:%M:%S")))
+            .alignment(Alignment::Right)
+            .render(status_iarea, buf);
+
         left_block.render(left_area, buf);
+        let items: Vec<ListItem> = NAMES.iter().map(|&n| ListItem::new(n)).collect();
+        let list = List::new(items).highlight_symbol(">> ");
+        StatefulWidget::render(list, left_iarea, buf, &mut self.list_state);
+
         right_block.render(right_area, buf);
         if let Some(game) = &self.current_game {
-            game.render(right_iarea, buf); // Keeps App completely ignorant of how games draw themselves
+            game.render(right_iarea, buf);
+        } else {
+            Paragraph::new("Press Tab/Shift+Tab to jump around\nPress Enter to interact\nPress↑/↓ to traverse the game list\nPress q to quit")
+                .style(Color::White)
+                .alignment(Alignment::Center).render(right_iarea, buf);
         }
     }
 }

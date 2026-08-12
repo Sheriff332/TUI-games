@@ -1,9 +1,10 @@
 use crate::storage::typedef::Playable;
+use crossterm::event::KeyEvent;
 
 pub fn run_game<G, F>(mut game: G, mut get_input: F)
 where
     G: Playable,
-    F: FnMut(&G) -> G::Action,
+    F: FnMut(&G) -> KeyEvent,
 {
     while !game.is_over() {
         let action = get_input(&game);
