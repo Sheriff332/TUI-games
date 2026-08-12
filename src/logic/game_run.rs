@@ -6,10 +6,7 @@ where
     F: FnMut(&G) -> G::Action,
 {
     while !game.is_over() {
-        // 1. Get input (from CLI, GUI, or AI)
         let action = get_input(&game);
-
-        // 2. Execute turn
         game.step_turn(action);
     }
 

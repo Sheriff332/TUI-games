@@ -5,12 +5,15 @@ mod io;
 mod logic;
 mod storage;
 
-fn main() -> std::io::Result<()>{
+fn main() -> std::io::Result<()> {
     let mut term = ratatui::init();
 
-    let mut app = App { exit : false };
+    let mut app = App {
+        current_game: None,
+        exit: false,
+    };
     let app_result = app.run(&mut term);
-    
+
     ratatui::restore();
     app_result
 }
