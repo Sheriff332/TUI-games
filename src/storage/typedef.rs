@@ -1,4 +1,9 @@
 use crate::storage::grid::Grid;
+
+pub struct App {
+    pub exit: bool,
+}
+
 pub struct Simulation<T> {
     pub grid: Grid<T>,
     pub step: usize,
