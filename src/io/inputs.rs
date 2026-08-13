@@ -8,6 +8,7 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
         match reading {
             Event::Key(key) if key.kind == KeyEventKind::Press => match key.code {
                 KeyCode::Esc => {
+                    app.current_game = None;
                     app.current_menu = CurrentMenu::Left;
                 }
                 KeyCode::Backspace => {
@@ -15,7 +16,13 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
                 }
                 KeyCode::Enter => {
                     if let Some(game) = app.current_game.as_mut() {
-                        game.step_turn(&app.keys);
+                        match game.step_turn(&app.keys) {
+                            Ok(-1) => {}
+                            Ok(winner) => {
+                                println!("{}", winner);
+                            }
+                            Err(e) => {}
+                        }
                     }
                     app.keys.clear();
                 }
@@ -33,7 +40,11 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
                 KeyCode::Down => app.list_state.select_next(),
                 KeyCode::Up => app.list_state.select_previous(),
                 KeyCode::Enter => {
-                    //game_run() thingy
+                    app.current_game = Some(app.selected_game.clone());
+                    match app.current_game.as_mut().unwrap().step_turn(&app.keys) {
+                        Ok(0) => {}
+                        _ => {}
+                    }
                     app.current_menu = CurrentMenu::Right;
                 }
                 _ => {}

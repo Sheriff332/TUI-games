@@ -2,9 +2,10 @@ use crate::io::inputs::handle_events;
 use crate::storage::typedef::{App, CurrentGame};
 use crate::storage::typedef::{CurrentMenu, NAMES, Simulable};
 use chrono::Local;
+use ratatui::layout::Constraint::Length;
 use ratatui::prelude::*;
-use ratatui::widgets::List;
 use ratatui::widgets::{Block, ListItem, Paragraph};
+use ratatui::widgets::{Clear, List};
 
 impl App {
     pub fn run(&mut self, term: &mut ratatui::DefaultTerminal) -> std::io::Result<()> {
@@ -87,6 +88,7 @@ impl Widget for &mut App {
 
         right_block.render(right_area, buf);
         if let Some(game) = &self.current_game {
+            Clear.render(right_iarea, buf);
             game.render(right_iarea, buf);
         } else {
             let text = Text::from(
@@ -96,15 +98,7 @@ impl Widget for &mut App {
             Press q to quit"
                     .to_string(),
             );
-            let varea = Layout::vertical([
-                Constraint::Fill(1),
-                Length(text.height() as u16),
-                Constraint::Fill(1),
-            ])
-            .split(right_iarea);
-            Paragraph::new(text)
-                .alignment(Alignment::Center)
-                .render(varea[1], buf);
+            game_text(text, right_iarea, buf);
         }
     }
 }
@@ -112,14 +106,17 @@ impl Widget for &mut App {
 impl Widget for &CurrentGame {
     fn render(self, area: Rect, buf: &mut Buffer) {
         let text = self.display();
-        let varea = Layout::vertical([
-            Constraint::Fill(1),
-            Constraint::Length(text.height() as u16),
-            Constraint::Fill(1),
-        ])
-        .split(area);
-        Paragraph::new(text)
-            .alignment(Alignment::Center)
-            .render(varea[1], buf);
+        game_text(text, area, buf);
     }
+}
+pub fn game_text(text: Text, area: Rect, buf: &mut Buffer) {
+    let varea = Layout::vertical([
+        Constraint::Fill(1),
+        Length(text.height() as u16),
+        Constraint::Fill(1),
+    ])
+    .split(area);
+    Paragraph::new(text)
+        .alignment(Alignment::Center)
+        .render(varea[1], buf);
 }

@@ -11,13 +11,16 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="refactor(io):  Center a div ;-;">
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="refactor(io): improve input batching and state based reading">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/inputs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/tui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/tui.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logic/game_run.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/game_run.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logic.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logic/game_run.rs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/logic/tictactoe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/tictactoe.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/grid.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/storage/grid.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/storage/typedef.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/storage/typedef.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -147,7 +150,9 @@
     <MESSAGE value="refactor(io): types and function refactoring for io support" />
     <MESSAGE value="refactor(io)" />
     <MESSAGE value="refactor(io):  Center a div ;-;" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(io):  Center a div ;-;" />
+    <MESSAGE value="refactor(io):improve input batching and state based reading" />
+    <MESSAGE value="refactor(io): improve input batching and state based reading" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor(io): improve input batching and state based reading" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

@@ -20,7 +20,7 @@ where
     pub fn set(&mut self, row: usize, col: usize, data: T) -> Result<(), io::Error> {
         let w = self.w;
 
-        if row > 0 && col > 0 && row <= self.h && col <= self.w {
+        if row < self.h && col < self.w {
             self.data[(row) * w + (col)] = data;
             Ok(())
         } else {
@@ -30,15 +30,15 @@ where
             ))
         }
     }
-    pub fn get_row(&self, row: usize) -> Option<impl Iterator<Item = &T>> {
-        if row > 0 && row <= self.h {
-            Some(self.data[((row) * self.w)..(row + 1) * self.w].iter())
+    pub fn get_row(&self, row: usize) -> Option<&[T]> {
+        if row < self.h {
+            Some(&self.data[((row) * self.w)..(row + 1) * self.w])
         } else {
             None
         }
     }
     pub fn set_row(&mut self, row: usize, data: Vec<T>) -> Result<(), io::Error> {
-        if row > 0 && row <= self.h {
+        if row < self.h {
             let row = &mut self.data[((row) * self.w)..row * self.w];
             row.clone_from_slice(&data);
             Ok(())
@@ -50,14 +50,14 @@ where
         }
     }
     pub fn get_col(&self, col: usize) -> Option<impl Iterator<Item = &T>> {
-        if col > 0 && col <= self.w {
+        if col < self.w {
             Some(self.data.iter().skip(col).step_by(self.w))
         } else {
             None
         }
     }
     pub fn set_col(&mut self, col: usize, data: Vec<T>) -> Result<(), io::Error> {
-        if col > 0 && col <= self.w {
+        if col < self.w {
             let col_indices = (col..self.data.len()).step_by(self.w);
             for (idx, x) in col_indices.zip(data) {
                 self.data[idx] = x;
