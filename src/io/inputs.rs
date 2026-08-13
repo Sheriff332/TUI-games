@@ -7,6 +7,9 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
     if app.current_menu == CurrentMenu::Right {
         match reading {
             Event::Key(key) if key.kind == KeyEventKind::Press => match key.code {
+                KeyCode::Esc => {
+                    app.current_menu = CurrentMenu::Left;
+                }
                 KeyCode::Backspace => {
                     app.keys.pop();
                 }
@@ -31,6 +34,7 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
                 KeyCode::Up => app.list_state.select_previous(),
                 KeyCode::Enter => {
                     //game_run() thingy
+                    app.current_menu = CurrentMenu::Right;
                 }
                 _ => {}
             },
