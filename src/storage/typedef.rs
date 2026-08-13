@@ -1,5 +1,5 @@
 use crate::storage::grid::Grid;
-use crossterm::event::KeyEvent;
+use crossterm::event::KeyCode;
 use enum_dispatch::enum_dispatch;
 use ratatui::prelude::*;
 use ratatui::widgets::ListState;
@@ -10,6 +10,7 @@ pub struct App {
     pub selected_game: CurrentGame,
     pub current_menu: CurrentMenu,
     pub list_state: ListState,
+    pub keys: Vec<KeyCode>,
 }
 
 impl App {
@@ -104,11 +105,11 @@ impl<T> Game<T> {
 
 #[enum_dispatch]
 pub trait Playable: Simulable {
-    fn step_turn(&mut self, action: KeyEvent) {
+    fn step_turn(&mut self, action: &Vec<KeyCode>) {
         self.handle_input(action);
         self.step();
     }
-    fn handle_input(&mut self, _: KeyEvent);
+    fn handle_input(&mut self, _: &Vec<KeyCode>);
     fn win_condition(&mut self);
     fn winner(&self) -> usize;
 }

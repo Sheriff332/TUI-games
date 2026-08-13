@@ -15,6 +15,7 @@ fn main() -> std::io::Result<()> {
         current_game: None,
         exit: false,
         list_state: ListState::default().with_selected(Some(0)),
+        keys: Vec::new(),
     };
     let app_result = app.run(&mut term);
 

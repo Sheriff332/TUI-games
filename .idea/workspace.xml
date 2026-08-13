@@ -11,9 +11,14 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="refactor(io)">
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="refactor(io):  Center a div ;-;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/inputs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/tui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/tui.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logic/game_run.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/game_run.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logic/tictactoe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/tictactoe.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/typedef.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/storage/typedef.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +146,8 @@
     <MESSAGE value="feat: TUI init" />
     <MESSAGE value="refactor(io): types and function refactoring for io support" />
     <MESSAGE value="refactor(io)" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(io)" />
+    <MESSAGE value="refactor(io):  Center a div ;-;" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor(io):  Center a div ;-;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

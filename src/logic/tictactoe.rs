@@ -1,8 +1,8 @@
 use crate::storage::typedef::*;
-use crossterm::event::KeyEvent;
+use crossterm::event::KeyCode;
 use ratatui::prelude::*;
 impl Playable for TicTacToe {
-    fn step_turn(&mut self, action: KeyEvent) {
+    fn step_turn(&mut self, action: &Vec<KeyCode>) {
         // self.game
         //     .sim
         //     .grid
@@ -12,7 +12,7 @@ impl Playable for TicTacToe {
         self.game.sim.step += 1;
     }
 
-    fn handle_input(&mut self, _: KeyEvent) {
+    fn handle_input(&mut self, _: &Vec<KeyCode>) {
         todo!()
     }
 

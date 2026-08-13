@@ -69,6 +69,16 @@ impl Widget for &mut App {
         Line::from(format!("{}", Local::now().format("%H:%M:%S")))
             .alignment(Alignment::Right)
             .render(status_iarea, buf);
+        Line::from(format!(
+            "{}",
+            self.keys
+                .iter()
+                .map(|x| x.to_string())
+                .collect::<Vec<_>>()
+                .join("+")
+        ))
+        .alignment(Alignment::Center)
+        .render(status_iarea, buf);
 
         left_block.render(left_area, buf);
         let items: Vec<ListItem> = NAMES.iter().map(|&n| ListItem::new(n)).collect();

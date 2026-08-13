@@ -1,14 +1,14 @@
 use crate::storage::typedef::Playable;
-use crossterm::event::KeyEvent;
+use crossterm::event::KeyCode;
 
 pub fn run_game<G, F>(mut game: G, mut get_input: F)
 where
     G: Playable,
-    F: FnMut(&G) -> KeyEvent,
+    F: FnMut(&G) -> Vec<KeyCode>,
 {
     while !game.is_over() {
         let action = get_input(&game);
-        game.step_turn(action);
+        game.step_turn(&action);
     }
 
     println!("{}", game.winner());
