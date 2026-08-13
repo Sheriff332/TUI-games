@@ -79,17 +79,37 @@ impl Widget for &mut App {
         if let Some(game) = &self.current_game {
             game.render(right_iarea, buf);
         } else {
-            Paragraph::new("Press Tab/Shift+Tab to jump around\nPress Enter to interact\nPress↑/↓ to traverse the game list\nPress q to quit")
-                .style(Color::White)
-                .alignment(Alignment::Center).render(right_iarea, buf);
+            let text = Text::from(
+                "Press Tab/Shift+Tab to jump around\n\
+            Press Enter to interact\n\
+            Press↑/↓ to traverse the game list\n\
+            Press q to quit"
+                    .to_string(),
+            );
+            let varea = Layout::vertical([
+                Constraint::Fill(1),
+                Length(text.height() as u16),
+                Constraint::Fill(1),
+            ])
+            .split(right_iarea);
+            Paragraph::new(text)
+                .alignment(Alignment::Center)
+                .render(varea[1], buf);
         }
     }
 }
 
 impl Widget for &CurrentGame {
     fn render(self, area: Rect, buf: &mut Buffer) {
-        Paragraph::new(self.display())
+        let text = self.display();
+        let varea = Layout::vertical([
+            Constraint::Fill(1),
+            Constraint::Length(text.height() as u16),
+            Constraint::Fill(1),
+        ])
+        .split(area);
+        Paragraph::new(text)
             .alignment(Alignment::Center)
-            .render(area, buf);
+            .render(varea[1], buf);
     }
 }
