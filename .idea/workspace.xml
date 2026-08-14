@@ -11,7 +11,12 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="ci: add GitHub Actions workflows for CI/CD and releases" />
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="style: run cargo fmt on storage.rs">
+      <change beforePath="$PROJECT_DIR$/src/io/inputs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/io/tui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/tui.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logic/tictactoe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/tictactoe.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/typedef.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/storage/typedef.rs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -146,7 +151,8 @@
     <MESSAGE value="feat(game): tictactoe.rs basic impl" />
     <MESSAGE value="refactor(game): tictactoe.rs polish, results, help and player tracking" />
     <MESSAGE value="ci: add GitHub Actions workflows for CI/CD and releases" />
-    <option name="LAST_COMMIT_MESSAGE" value="ci: add GitHub Actions workflows for CI/CD and releases" />
+    <MESSAGE value="style: run cargo fmt on storage.rs" />
+    <option name="LAST_COMMIT_MESSAGE" value="style: run cargo fmt on storage.rs" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

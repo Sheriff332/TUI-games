@@ -11,7 +11,7 @@ use ratatui::widgets::{Clear, List};
 impl App {
     pub fn run(&mut self, term: &mut ratatui::DefaultTerminal) -> std::io::Result<()> {
         while !self.exit {
-            (&mut *term).draw(|frame| {
+            (*term).draw(|frame| {
                 frame.render_widget(&mut *self, frame.area());
             })?;
             if handle_events(self)? {
@@ -70,14 +70,14 @@ impl Widget for &mut App {
         Line::from(format!("{}", Local::now().format("%H:%M:%S")))
             .alignment(Alignment::Right)
             .render(status_iarea, buf);
-        Line::from(format!(
-            "{}",
+        Line::from(
             self.keys
                 .iter()
                 .map(|x| x.to_string())
                 .collect::<Vec<_>>()
                 .join("+")
-        ))
+                .to_string(),
+        )
         .alignment(Alignment::Center)
         .render(status_iarea, buf);
 

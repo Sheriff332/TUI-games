@@ -41,10 +41,7 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
                 KeyCode::Up => app.list_state.select_previous(),
                 KeyCode::Enter => {
                     app.current_game = Some(app.selected_game.clone());
-                    match app.current_game.as_mut().unwrap().step_turn(&app.keys) {
-                        Ok(0) => {}
-                        _ => {}
-                    }
+                    if let Ok(0) = app.current_game.as_mut().unwrap().step_turn(&app.keys) {}
                     app.current_menu = CurrentMenu::Right;
                 }
                 _ => {}

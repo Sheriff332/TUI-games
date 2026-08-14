@@ -2,7 +2,7 @@ use crate::storage::typedef::*;
 use crossterm::event::KeyCode;
 use ratatui::prelude::*;
 impl Playable for TicTacToe {
-    fn handle_input(&mut self, action: &Vec<KeyCode>) -> Vec<u32> {
+    fn handle_input(&mut self, action: &[KeyCode]) -> Vec<u32> {
         if action.len() == 2
             && let KeyCode::Char(r) = action[0]
             && let Some(row) = r.to_digit(10)
@@ -25,12 +25,11 @@ impl Playable for TicTacToe {
         }
     }
 
-    fn win_condition(&mut self, inputs: &Vec<u32>) {
+    fn win_condition(&mut self, inputs: &[u32]) {
         let (row, col) = (inputs[0], inputs[1]);
         let condition: bool = {
-            if [TripleT::X, TripleT::O].contains(
-                &self
-                    .game
+            [TripleT::X, TripleT::O].contains(
+                self.game
                     .sim
                     .grid
                     .get(row as usize - 1, col as usize - 1)
@@ -72,11 +71,6 @@ impl Playable for TicTacToe {
                         .collect::<Vec<_>>()
                         .windows(2)
                         .all(|w| w[0] == w[1]))
-            {
-                true
-            } else {
-                false
-            }
         };
         if condition {
             self.game.sim.completed = true;
@@ -136,11 +130,7 @@ impl Simulable for TicTacToe {
         }
     }
     fn is_over(&self) -> bool {
-        if self.game.sim.completed || self.game.sim.step == 9 {
-            true
-        } else {
-            false
-        }
+        self.game.sim.completed || self.game.sim.step == 9
     }
     fn reset(&mut self) {
         *self = TicTacToe::new();

@@ -110,7 +110,7 @@ impl<T> Game<T> {
 
 #[enum_dispatch]
 pub trait Playable: Simulable {
-    fn step_turn(&mut self, action: &Vec<KeyCode>) -> Result<i32, &str> {
+    fn step_turn(&mut self, action: &[KeyCode]) -> Result<i32, &str> {
         let inputs = self.handle_input(action);
         if inputs.is_empty() {
             return Err("Invalid Input");
@@ -122,8 +122,8 @@ pub trait Playable: Simulable {
         }
         Ok(-1)
     }
-    fn handle_input(&mut self, _: &Vec<KeyCode>) -> Vec<u32>;
-    fn win_condition(&mut self, inputs: &Vec<u32>);
+    fn handle_input(&mut self, _: &[KeyCode]) -> Vec<u32>;
+    fn win_condition(&mut self, inputs: &[u32]);
     fn winner(&self) -> usize;
     fn help_text(&self) -> &'static str;
     fn current_player(&self) -> Option<usize> {
