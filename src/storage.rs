@@ -1,2 +1,2 @@
-pub mod typedef;
 pub mod grid;
+pub mod typedef;

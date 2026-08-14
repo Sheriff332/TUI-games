@@ -11,12 +11,7 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="refactor(game): tictactoe.rs polish, results, help and player tracking">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/release.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-    </list>
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="ci: add GitHub Actions workflows for CI/CD and releases" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -150,7 +145,8 @@
     <MESSAGE value="refactor(io): improve input batching and state based reading" />
     <MESSAGE value="feat(game): tictactoe.rs basic impl" />
     <MESSAGE value="refactor(game): tictactoe.rs polish, results, help and player tracking" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(game): tictactoe.rs polish, results, help and player tracking" />
+    <MESSAGE value="ci: add GitHub Actions workflows for CI/CD and releases" />
+    <option name="LAST_COMMIT_MESSAGE" value="ci: add GitHub Actions workflows for CI/CD and releases" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
