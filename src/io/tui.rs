@@ -1,4 +1,5 @@
 use crate::io::inputs::handle_events;
+use crate::storage::typedef::Playable;
 use crate::storage::typedef::{App, CurrentGame};
 use crate::storage::typedef::{CurrentMenu, NAMES, Simulable};
 use chrono::Local;
@@ -66,7 +67,6 @@ impl Widget for &mut App {
         let right_iarea = right_block.inner(right_area);
 
         status_block.render(status_area, buf);
-        Line::from(name).render(status_iarea, buf);
         Line::from(format!("{}", Local::now().format("%H:%M:%S")))
             .alignment(Alignment::Right)
             .render(status_iarea, buf);
@@ -90,6 +90,15 @@ impl Widget for &mut App {
         if let Some(game) = &self.current_game {
             Clear.render(right_iarea, buf);
             game.render(right_iarea, buf);
+            Line::from(vec![
+                Span::styled("?Help:\n", Style::default().fg(Color::Yellow)),
+                Span::raw(game.help_text()),
+            ])
+            .render(right_iarea, buf);
+            if let Some(player) = game.current_player() {
+                Line::from(format!("Current player: Player {}", player + 1))
+                    .render(status_iarea, buf);
+            }
         } else {
             let text = Text::from(
                 "Press Tab/Shift+Tab to jump around\n\

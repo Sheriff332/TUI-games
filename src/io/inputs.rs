@@ -1,5 +1,5 @@
-use crate::storage::typedef::Playable;
 use crate::storage::typedef::{App, CurrentMenu};
+use crate::storage::typedef::{Playable, Simulable};
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 
 pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
@@ -16,12 +16,12 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
                 }
                 KeyCode::Enter => {
                     if let Some(game) = app.current_game.as_mut() {
-                        match game.step_turn(&app.keys) {
-                            Ok(-1) => {}
-                            Ok(winner) => {
-                                println!("{}", winner);
+                        if game.is_over() {
+                            if key.code == KeyCode::Enter {
+                                game.reset();
                             }
-                            Err(e) => {}
+                        } else {
+                            let _ = game.step_turn(&app.keys);
                         }
                     }
                     app.keys.clear();

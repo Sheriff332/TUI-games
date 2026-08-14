@@ -8,13 +8,13 @@ impl Playable for TicTacToe {
             && let Some(row) = r.to_digit(10)
             && let KeyCode::Char(c) = action[1]
             && let Some(col) = c.to_digit(10)
-            && self.game.sim.grid.get(row as usize, col as usize) == Some(&TripleT::Empty)
+            && self.game.sim.grid.get(row as usize - 1, col as usize - 1) == Some(&TripleT::Empty)
         {
             match self
                 .game
                 .sim
                 .grid
-                .set(row as usize, col as usize, self.piece)
+                .set(row as usize - 1, col as usize - 1, self.piece)
             {
                 Ok(_) => {}
                 Err(_) => return Vec::new(),
@@ -28,45 +28,50 @@ impl Playable for TicTacToe {
     fn win_condition(&mut self, inputs: &Vec<u32>) {
         let (row, col) = (inputs[0], inputs[1]);
         let condition: bool = {
-            if [TripleT::X, TripleT::O]
-                .contains(&self.game.sim.grid.get(row as usize, col as usize).unwrap())
-                && (self
+            if [TripleT::X, TripleT::O].contains(
+                &self
                     .game
                     .sim
                     .grid
-                    .get_row(row as usize)
+                    .get(row as usize - 1, col as usize - 1)
+                    .unwrap(),
+            ) && (self
+                .game
+                .sim
+                .grid
+                .get_row(row as usize - 1)
+                .unwrap()
+                .windows(2)
+                .all(|w| w[0] == w[1])
+                || self
+                    .game
+                    .sim
+                    .grid
+                    .get_col(col as usize - 1)
                     .unwrap()
+                    .collect::<Vec<_>>()
                     .windows(2)
                     .all(|w| w[0] == w[1])
-                    || self
+                || row == col
+                    && self
                         .game
                         .sim
                         .grid
-                        .get_col(col as usize)
+                        .get_diag()
                         .unwrap()
                         .collect::<Vec<_>>()
                         .windows(2)
                         .all(|w| w[0] == w[1])
-                    || row == col
-                        && self
-                            .game
-                            .sim
-                            .grid
-                            .get_diag()
-                            .unwrap()
-                            .collect::<Vec<_>>()
-                            .windows(2)
-                            .all(|w| w[0] == w[1])
-                    || row + col == 2
-                        && self
-                            .game
-                            .sim
-                            .grid
-                            .get_anti_diag()
-                            .unwrap()
-                            .collect::<Vec<_>>()
-                            .windows(2)
-                            .all(|w| w[0] == w[1]))
+                || row + col == 4
+                    && self
+                        .game
+                        .sim
+                        .grid
+                        .get_anti_diag()
+                        .unwrap()
+                        .collect::<Vec<_>>()
+                        .windows(2)
+                        .all(|w| w[0] == w[1]))
             {
                 true
             } else {
@@ -79,7 +84,13 @@ impl Playable for TicTacToe {
     }
 
     fn winner(&self) -> usize {
-        self.game.current_player
+        self.game.current_player + 1
+    }
+    fn help_text(&self) -> &'static str {
+        "Input: (1-3)column + (1-3)row"
+    }
+    fn current_player(&self) -> Option<usize> {
+        Some(self.game.current_player)
     }
 }
 
@@ -97,16 +108,23 @@ impl Simulable for TicTacToe {
         self.game.sim.step += 1;
         true
     }
-    fn display(&self) -> Text {
-        let s = (0..3)
-            .map(|row| {
-                (0..3)
-                    .map(|col| format!(" {} ", self.dt(row, col)))
-                    .collect::<Vec<_>>()
-                    .join("|")
-            })
-            .collect::<Vec<_>>()
-            .join("\n---------\n");
+    fn display(&self) -> Text<'_> {
+        let s: String = if !self.is_over() {
+            (0..3)
+                .map(|row| {
+                    (0..3)
+                        .map(|col| format!(" {} ", self.dt(row, col)))
+                        .collect::<Vec<_>>()
+                        .join("|")
+                })
+                .collect::<Vec<_>>()
+                .join("\n---------\n")
+        } else {
+            format!(
+                "The winner is Player {}!\nPress Enter to play again or Esc to go back.",
+                self.winner()
+            )
+        };
         Text::from(s)
     }
     fn dt(&self, row: usize, col: usize) -> String {
@@ -123,5 +141,8 @@ impl Simulable for TicTacToe {
         } else {
             false
         }
+    }
+    fn reset(&mut self) {
+        *self = TicTacToe::new();
     }
 }

@@ -112,7 +112,7 @@ impl<T> Game<T> {
 pub trait Playable: Simulable {
     fn step_turn(&mut self, action: &Vec<KeyCode>) -> Result<i32, &str> {
         let inputs = self.handle_input(action);
-        if inputs == Vec::new() {
+        if inputs.is_empty() {
             return Err("Invalid Input");
         } //input checking
         self.win_condition(&inputs);
@@ -125,14 +125,19 @@ pub trait Playable: Simulable {
     fn handle_input(&mut self, _: &Vec<KeyCode>) -> Vec<u32>;
     fn win_condition(&mut self, inputs: &Vec<u32>);
     fn winner(&self) -> usize;
+    fn help_text(&self) -> &'static str;
+    fn current_player(&self) -> Option<usize> {
+        None
+    }
 }
 
 #[enum_dispatch]
 pub trait Simulable {
     fn step(&mut self) -> bool; //the bool states if the sim is stepping (false if over)
-    fn display(&self) -> Text;
+    fn display(&self) -> Text<'_>;
     fn dt(&self, row: usize, col: usize) -> String; //display translate, basically match
     fn is_over(&self) -> bool;
+    fn reset(&mut self);
 }
 
 #[enum_dispatch(Simulable)]
