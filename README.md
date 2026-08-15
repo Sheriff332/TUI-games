@@ -1,7 +1,7 @@
 # TUI(Ar)cade
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)]()
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![Latest Release](https://img.shields.io/github/v/release/Sheriff332/TUIcade)](https://github.com/Sheriff332/TUIcade/releases/latest)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Sheriff332/TUIcade/rust.yml)](https://github.com/Sheriff332/TUIcade/actions)
 
 ## Game list:
 ✅ TicTacToe
