@@ -11,10 +11,15 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="style: run cargo fmt on storage.rs">
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/logic/gameoflife.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CONTRIBUTING" beforeDir="false" afterPath="$PROJECT_DIR$/CONTRIBUTING" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/inputs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/tui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/tui.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logic.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/logic/tictactoe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/tictactoe.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/storage/typedef.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/storage/typedef.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,8 +36,14 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="INCOMING_COMMITS_CHECK_STRATEGY" value="FETCH" />
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -68,22 +79,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Cargo.Run TUI-games.executor": "Run",
-    "CidrDebugProfileConversion": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/sheriff/RustroverProjects/TUI-games",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "settings.editor.selected.configurable": "language.rust.cargo.check"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Cargo.Run TUI-games.executor&quot;: &quot;Run&quot;,
+    &quot;CidrDebugProfileConversion&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git.auto.fetch.suggestion.counter&quot;: &quot;1&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/sheriff/RustroverProjects/TUIcade&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;language.rust.cargo.check&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -93,7 +105,7 @@
   <component name="RunManager">
     <configuration name="Run TUI-games" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="buildProfileId" value="dev" />
-      <option name="command" value="run --package TUI-games --bin TUI-games" />
+      <option name="command" value="run --package tuicade --bin tuicade" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -140,6 +152,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT_PROFILE" value="Default" />
     <MESSAGE value="init" />
     <MESSAGE value="feat: basic grid implementation" />
     <MESSAGE value="feat: TUI init" />
@@ -152,7 +165,10 @@
     <MESSAGE value="refactor(game): tictactoe.rs polish, results, help and player tracking" />
     <MESSAGE value="ci: add GitHub Actions workflows for CI/CD and releases" />
     <MESSAGE value="style: run cargo fmt on storage.rs" />
-    <option name="LAST_COMMIT_MESSAGE" value="style: run cargo fmt on storage.rs" />
+    <MESSAGE value="style: run cargo clippy" />
+    <option name="LAST_COMMIT_MESSAGE" value="style: run cargo clippy" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

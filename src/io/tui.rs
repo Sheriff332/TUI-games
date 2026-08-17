@@ -1,7 +1,7 @@
 use crate::io::inputs::handle_events;
-use crate::storage::typedef::Playable;
-use crate::storage::typedef::{App, CurrentGame};
+use crate::storage::typedef::App;
 use crate::storage::typedef::{CurrentMenu, NAMES, Simulable};
+use crate::storage::typedef::{MenuItem, Playable};
 use chrono::Local;
 use ratatui::layout::Constraint::Length;
 use ratatui::prelude::*;
@@ -17,6 +17,9 @@ impl App {
             if handle_events(self)? {
                 break;
             }
+            if let Some(item) = &mut self.current_item {
+                item.step_tick();
+            }
         }
         Ok(())
     }
@@ -28,7 +31,7 @@ impl Widget for &mut App {
         Self: Sized,
     {
         use Constraint::{Length, Min};
-        let name = if let Some(game) = &self.current_game {
+        let name = if let Some(game) = &self.current_item {
             game.name()
         } else {
             ""
@@ -87,17 +90,22 @@ impl Widget for &mut App {
         StatefulWidget::render(list, left_iarea, buf, &mut self.list_state);
 
         right_block.render(right_area, buf);
-        if let Some(game) = &self.current_game {
+        if let Some(item) = &self.current_item {
             Clear.render(right_iarea, buf);
-            game.render(right_iarea, buf);
+            item.render(right_iarea, buf);
             Line::from(vec![
                 Span::styled("?Help:\n", Style::default().fg(Color::Yellow)),
-                Span::raw(game.help_text()),
+                Span::raw(item.help_text()),
             ])
             .render(right_iarea, buf);
-            if let Some(player) = game.current_player() {
-                Line::from(format!("Current player: Player {}", player + 1))
-                    .render(status_iarea, buf);
+            match item {
+                MenuItem::ActiveSim(sim) => {}
+                MenuItem::ActiveGame(game) => {
+                    if let Some(player) = game.current_player() {
+                        Line::from(format!("Current player: Player {}", player + 1))
+                            .render(status_iarea, buf);
+                    }
+                }
             }
         } else {
             let text = Text::from(
@@ -112,7 +120,7 @@ impl Widget for &mut App {
     }
 }
 
-impl Widget for &CurrentGame {
+impl Widget for &MenuItem {
     fn render(self, area: Rect, buf: &mut Buffer) {
         let text = self.display();
         game_text(text, area, buf);

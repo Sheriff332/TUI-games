@@ -6,8 +6,7 @@ use ratatui::widgets::ListState;
 
 pub struct App {
     pub exit: bool,
-    pub current_game: Option<CurrentGame>,
-    pub selected_game: CurrentGame,
+    pub current_item: Option<MenuItem>,
     pub current_menu: CurrentMenu,
     pub list_state: ListState,
     pub keys: Vec<KeyCode>,
@@ -76,6 +75,7 @@ pub struct Simulation<T> {
     pub grid: Grid<T>,
     pub step: usize,
     pub completed: bool,
+    pub auto_run: bool,
 }
 
 impl<T> Simulation<T> {
@@ -84,6 +84,7 @@ impl<T> Simulation<T> {
             grid,
             step: 0,
             completed: false,
+            auto_run: false,
         }
     }
 }
@@ -122,10 +123,8 @@ pub trait Playable: Simulable {
         }
         Ok(-1)
     }
-    fn handle_input(&mut self, _: &[KeyCode]) -> Vec<u32>;
     fn win_condition(&mut self, inputs: &[u32]);
     fn winner(&self) -> usize;
-    fn help_text(&self) -> &'static str;
     fn current_player(&self) -> Option<usize> {
         None
     }
@@ -134,7 +133,12 @@ pub trait Playable: Simulable {
 #[enum_dispatch]
 pub trait Simulable {
     fn step(&mut self) -> bool; //the bool states if the sim is stepping (false if over)
+    fn step_tick(&mut self) -> bool {
+        false
+    }
+    fn handle_input(&mut self, _: &[KeyCode]) -> Vec<u32>; //in Simulable for initial state
     fn display(&self) -> Text<'_>;
+    fn help_text(&self) -> &'static str;
     fn dt(&self, row: usize, col: usize) -> String; //display translate, basically match
     fn is_over(&self) -> bool;
     fn reset(&mut self);
@@ -143,18 +147,61 @@ pub trait Simulable {
 #[enum_dispatch(Simulable)]
 #[enum_dispatch(Playable)]
 #[derive(Clone)]
-pub enum CurrentGame {
+pub enum ActiveGame {
     TicTacToe(TicTacToe),
 }
 
-pub const NAMES: [&str; 1] = ["TicTacToe"];
+#[enum_dispatch(Simulable)]
+pub enum ActiveSim {
+    GameOfLife(GameOfLife),
+}
 
-impl CurrentGame {
+pub const NAMES: [&str; 2] = ["TicTacToe", "Game Of Life"];
+
+impl MenuItem {
     pub fn name(&self) -> &str {
         match &self {
-            CurrentGame::TicTacToe(_) => NAMES[0],
+            MenuItem::ActiveGame(ActiveGame::TicTacToe(_)) => NAMES[0],
+            MenuItem::ActiveSim(ActiveSim::GameOfLife(_)) => NAMES[1],
         }
     }
+    pub fn step_tick(&mut self) -> bool {
+        match self {
+            MenuItem::ActiveGame(game) => game.step_tick(),
+            MenuItem::ActiveSim(sim) => sim.step_tick(),
+        }
+    }
+}
+
+impl ActiveSim {
+    pub fn is_running(&self) -> bool {
+        match self {
+            ActiveSim::GameOfLife(s) => s.sim.auto_run,
+        }
+    }
+    pub fn toggle_running(&mut self) {
+        match self {
+            ActiveSim::GameOfLife(s) => s.sim.auto_run = !s.sim.auto_run,
+        }
+    }
+}
+
+pub fn select_item(index: usize) -> Option<MenuItem> {
+    match index {
+        0 => Some(MenuItem::ActiveGame(
+            ActiveGame::TicTacToe(TicTacToe::new()),
+        )),
+        1 => Some(MenuItem::ActiveSim(
+            ActiveSim::GameOfLife(GameOfLife::new()),
+        )),
+        _ => None,
+    }
+}
+
+#[enum_dispatch(Simulable)]
+pub enum MenuItem {
+    ActiveGame(ActiveGame),
+    ActiveSim(ActiveSim),
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -181,6 +228,27 @@ impl TicTacToe {
             } else {
                 TripleT::O
             },
+        }
+    }
+}
+
+#[derive(Clone, PartialEq)]
+pub enum GOLCell {
+    Dead,
+    Alive,
+}
+pub struct GameOfLife {
+    pub sim: Simulation<GOLCell>,
+    pub buf: Simulation<GOLCell>,
+    pub current_read: u8,
+}
+
+impl GameOfLife {
+    pub fn new() -> GameOfLife {
+        GameOfLife {
+            sim: Simulation::new(Grid::from_vec(vec![vec![GOLCell::Dead; 25]; 25])),
+            buf: Simulation::new(Grid::from_vec(vec![vec![GOLCell::Dead; 25]; 25])),
+            current_read: 0,
         }
     }
 }

@@ -2,29 +2,6 @@ use crate::storage::typedef::*;
 use crossterm::event::KeyCode;
 use ratatui::prelude::*;
 impl Playable for TicTacToe {
-    fn handle_input(&mut self, action: &[KeyCode]) -> Vec<u32> {
-        if action.len() == 2
-            && let KeyCode::Char(r) = action[0]
-            && let Some(row) = r.to_digit(10)
-            && let KeyCode::Char(c) = action[1]
-            && let Some(col) = c.to_digit(10)
-            && self.game.sim.grid.get(row as usize - 1, col as usize - 1) == Some(&TripleT::Empty)
-        {
-            match self
-                .game
-                .sim
-                .grid
-                .set(row as usize - 1, col as usize - 1, self.piece)
-            {
-                Ok(_) => {}
-                Err(_) => return Vec::new(),
-            }
-            vec![row, col]
-        } else {
-            Vec::new()
-        }
-    }
-
     fn win_condition(&mut self, inputs: &[u32]) {
         let (row, col) = (inputs[0], inputs[1]);
         let condition: bool = {
@@ -80,9 +57,6 @@ impl Playable for TicTacToe {
     fn winner(&self) -> usize {
         self.game.current_player + 1
     }
-    fn help_text(&self) -> &'static str {
-        "Input: (1-3)column + (1-3)row"
-    }
     fn current_player(&self) -> Option<usize> {
         Some(self.game.current_player)
     }
@@ -102,6 +76,31 @@ impl Simulable for TicTacToe {
         self.game.sim.step += 1;
         true
     }
+
+    fn handle_input(&mut self, action: &[KeyCode]) -> Vec<u32> {
+        if action.len() == 2
+            && let KeyCode::Char(r) = action[0]
+            && let Some(row) = r.to_digit(10)
+            && let KeyCode::Char(c) = action[1]
+            && let Some(col) = c.to_digit(10)
+            && row > 0
+            && col > 0
+            && self.game.sim.grid.get(row as usize - 1, col as usize - 1) == Some(&TripleT::Empty)
+        {
+            match self
+                .game
+                .sim
+                .grid
+                .set(row as usize - 1, col as usize - 1, self.piece)
+            {
+                Ok(_) => {}
+                Err(_) => return Vec::new(),
+            }
+            vec![row, col]
+        } else {
+            Vec::new()
+        }
+    }
     fn display(&self) -> Text<'_> {
         let s: String = if !self.is_over() {
             (0..3)
@@ -120,6 +119,9 @@ impl Simulable for TicTacToe {
             )
         };
         Text::from(s)
+    }
+    fn help_text(&self) -> &'static str {
+        "Input: (1-3)column + (1-3)row"
     }
     fn dt(&self, row: usize, col: usize) -> String {
         match self.game.sim.grid.get(row, col) {
