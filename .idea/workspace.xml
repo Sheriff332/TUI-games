@@ -12,15 +12,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/logic/gameoflife.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CONTRIBUTING" beforeDir="false" afterPath="$PROJECT_DIR$/CONTRIBUTING" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/inputs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/tui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/tui.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logic.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logic/tictactoe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/tictactoe.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/storage/typedef.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/storage/typedef.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logic/gameoflife.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/gameoflife.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

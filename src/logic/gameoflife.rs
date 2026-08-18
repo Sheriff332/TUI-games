@@ -13,10 +13,10 @@ impl Simulable for GameOfLife {
         }
         for i in 0..25usize {
             for j in 0..25usize {
-                let count: usize = (i.saturating_sub(1)..=i + 1)
+                let count: usize = (i.saturating_sub(1)..=(i + 1).clamp(0, 24))
                     .into_iter()
                     .map(|x| {
-                        (j.saturating_sub(1)..=j + 1)
+                        (j.saturating_sub(1)..=(j + 1).clamp(0, 24))
                             .into_iter()
                             .filter(|&y| {
                                 (x != i || y != j)
@@ -48,7 +48,7 @@ impl Simulable for GameOfLife {
         }
         self.sim.step += 1;
         self.buf.step += 1;
-        std::mem::swap(&mut self.buf, &mut self.sim);
+        std::mem::swap(&mut self.buf.grid, &mut self.sim.grid);
         true
     }
 
@@ -79,7 +79,7 @@ impl Simulable for GameOfLife {
                 let a = iter.next().unwrap_or(0);
                 let b = iter.next().unwrap_or(0);
                 return if iter.next() == None && a > 0 && b > 0 && a <= 25 && b <= 25 {
-                    let cell = match self.sim.grid.get(a as usize, b as usize).unwrap() {
+                    let cell = match self.sim.grid.get(a as usize - 1, b as usize - 1).unwrap() {
                         GOLCell::Dead => GOLCell::Alive,
                         GOLCell::Alive => GOLCell::Dead,
                     };
@@ -110,14 +110,13 @@ impl Simulable for GameOfLife {
     }
 
     fn help_text(&self) -> &'static str {
-        "(1-25) + '<space>' + (1-25) to input a living cell \n\
-                                          Enter to start/stop simulation"
+        "(1-25) + '<space>' + (1-25) to input a living cell \n Enter to start/stop simulation"
     }
 
     fn dt(&self, row: usize, col: usize) -> String {
         match self.sim.grid.get(row, col) {
-            Some(GOLCell::Alive) => "██".to_string(),
-            Some(GOLCell::Dead) => "▓▓".to_string(),
+            Some(GOLCell::Alive) => "@".to_string(),
+            Some(GOLCell::Dead) => " ".to_string(),
             None => "".to_string(),
         }
     }

@@ -99,7 +99,13 @@ impl Widget for &mut App {
             ])
             .render(right_iarea, buf);
             match item {
-                MenuItem::ActiveSim(sim) => {}
+                MenuItem::ActiveSim(sim) => {
+                    let str = match sim.is_running() {
+                        true => "Running",
+                        false => "Paused",
+                    };
+                    Line::from(format!("Simulation: {}", str)).render(status_iarea, buf);
+                }
                 MenuItem::ActiveGame(game) => {
                     if let Some(player) = game.current_player() {
                         Line::from(format!("Current player: Player {}", player + 1))

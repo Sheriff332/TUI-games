@@ -3,7 +3,7 @@ use crate::storage::typedef::{Playable, Simulable};
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 
 pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
-    if event::poll(core::time::Duration::from_millis(50))? {
+    if event::poll(core::time::Duration::from_millis(250))? {
         let reading = event::read()?;
         if app.current_menu == CurrentMenu::Right {
             match reading {
@@ -26,8 +26,14 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
                                     }
                                 }
                                 MenuItem::ActiveSim(sim) => {
-                                    if sim.handle_input(&app.keys) == vec![0] {
+                                    if sim.is_running() {
                                         sim.toggle_running();
+                                    } else {
+                                        if app.keys.is_empty() {
+                                            sim.toggle_running();
+                                        } else {
+                                            sim.handle_input(&app.keys);
+                                        }
                                     }
                                 }
                             }
