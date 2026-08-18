@@ -7,7 +7,7 @@
 ✅ TicTacToe
 🟥 (More coming soon!)
 
-## GSimulation list:
+## Simulation list:
 ✅ Game of Life
 🟥 (More coming soon!)
 
