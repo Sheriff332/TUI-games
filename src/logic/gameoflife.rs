@@ -14,10 +14,8 @@ impl Simulable for GameOfLife {
         for i in 0..25usize {
             for j in 0..25usize {
                 let count: usize = (i.saturating_sub(1)..=(i + 1).clamp(0, 24))
-                    .into_iter()
                     .map(|x| {
                         (j.saturating_sub(1)..=(j + 1).clamp(0, 24))
-                            .into_iter()
                             .filter(|&y| {
                                 (x != i || y != j)
                                     && self.sim.grid.get(x, y).unwrap_or(&GOLCell::Dead)
@@ -26,13 +24,9 @@ impl Simulable for GameOfLife {
                             .count()
                     })
                     .sum();
-                if count == 3 {
-                    self.buf
-                        .grid
-                        .set(i, j, GOLCell::Alive)
-                        .expect("Failed to set cell");
-                } else if self.sim.grid.get(i, j).unwrap_or(&GOLCell::Dead) == &GOLCell::Alive
-                    && count == 2
+                if count == 3
+                    || (self.sim.grid.get(i, j).unwrap_or(&GOLCell::Dead) == &GOLCell::Alive
+                        && count == 2)
                 {
                     self.buf
                         .grid
@@ -72,13 +66,10 @@ impl Simulable for GameOfLife {
                 })
                 .collect::<Option<String>>()
             {
-                let mut iter = s
-                    .split_whitespace()
-                    .map(|x| x.parse::<u32>().unwrap_or(0))
-                    .into_iter();
+                let mut iter = s.split_whitespace().map(|x| x.parse::<u32>().unwrap_or(0));
                 let a = iter.next().unwrap_or(0);
                 let b = iter.next().unwrap_or(0);
-                return if iter.next() == None && a > 0 && b > 0 && a <= 25 && b <= 25 {
+                return if iter.next().is_none() && a > 0 && b > 0 && a <= 25 && b <= 25 {
                     let cell = match self.sim.grid.get(a as usize - 1, b as usize - 1).unwrap() {
                         GOLCell::Dead => GOLCell::Alive,
                         GOLCell::Alive => GOLCell::Dead,

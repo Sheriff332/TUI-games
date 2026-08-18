@@ -11,10 +11,8 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="">
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="feat: add Simulation support and Game Of Life">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io/inputs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io/tui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/tui.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/logic/gameoflife.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/gameoflife.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,9 +159,15 @@
     <MESSAGE value="ci: add GitHub Actions workflows for CI/CD and releases" />
     <MESSAGE value="style: run cargo fmt on storage.rs" />
     <MESSAGE value="style: run cargo clippy" />
-    <option name="LAST_COMMIT_MESSAGE" value="style: run cargo clippy" />
+    <MESSAGE value="feat: add Simulation support and Game Of Life" />
+    <MESSAGE value="annoying inspection fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="annoying inspection fix" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
