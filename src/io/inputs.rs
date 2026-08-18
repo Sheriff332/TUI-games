@@ -2,6 +2,7 @@ use crate::storage::typedef::{App, CurrentMenu, MenuItem, select_item};
 use crate::storage::typedef::{Playable, Simulable};
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 
+//noinspection ALL
 pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
     if event::poll(core::time::Duration::from_millis(250))? {
         let reading = event::read()?;
