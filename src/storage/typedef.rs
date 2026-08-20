@@ -3,6 +3,7 @@ use crossterm::event::KeyCode;
 use enum_dispatch::enum_dispatch;
 use ratatui::prelude::*;
 use ratatui::widgets::ListState;
+use std::collections::VecDeque;
 
 pub struct App {
     pub exit: bool,
@@ -76,15 +77,19 @@ pub struct Simulation<T> {
     pub step: usize,
     pub completed: bool,
     pub auto_run: bool,
+    pub ticks: usize,
+    pub ticks_per_step: usize,
 }
 
 impl<T> Simulation<T> {
-    pub fn new(grid: Grid<T>) -> Simulation<T> {
+    pub fn new(grid: Grid<T>, tps: usize) -> Simulation<T> {
         Simulation {
             grid,
             step: 0,
             completed: false,
             auto_run: false,
+            ticks: 0,
+            ticks_per_step: tps,
         }
     }
 }
@@ -149,6 +154,7 @@ pub trait Simulable {
 #[derive(Clone)]
 pub enum ActiveGame {
     TicTacToe(TicTacToe),
+    Snake(Snake),
 }
 
 #[enum_dispatch(Simulable)]
@@ -156,13 +162,14 @@ pub enum ActiveSim {
     GameOfLife(GameOfLife),
 }
 
-pub const NAMES: [&str; 2] = ["TicTacToe", "Game Of Life"];
+pub const NAMES: [&str; 3] = ["TicTacToe", "Game Of Life", "Snake"];
 
 impl MenuItem {
     pub fn name(&self) -> &str {
         match &self {
             MenuItem::ActiveGame(ActiveGame::TicTacToe(_)) => NAMES[0],
             MenuItem::ActiveSim(ActiveSim::GameOfLife(_)) => NAMES[1],
+            MenuItem::ActiveGame(ActiveGame::Snake(_)) => NAMES[2],
         }
     }
     pub fn step_tick(&mut self) -> bool {
@@ -194,6 +201,7 @@ pub fn select_item(index: usize) -> Option<MenuItem> {
         1 => Some(MenuItem::ActiveSim(
             ActiveSim::GameOfLife(GameOfLife::new()),
         )),
+        2 => Some(MenuItem::ActiveGame(ActiveGame::Snake(Snake::new()))),
         _ => None,
     }
 }
@@ -220,7 +228,7 @@ impl TicTacToe {
     pub fn new() -> TicTacToe {
         TicTacToe {
             game: Game::new(
-                Simulation::new(Grid::from_vec(vec![vec![TripleT::Empty; 3]; 3])),
+                Simulation::new(Grid::from_vec(vec![vec![TripleT::Empty; 3]; 3]), 1),
                 2,
             ),
             piece: if rand::random() {
@@ -246,9 +254,45 @@ pub struct GameOfLife {
 impl GameOfLife {
     pub fn new() -> GameOfLife {
         GameOfLife {
-            sim: Simulation::new(Grid::from_vec(vec![vec![GOLCell::Dead; 25]; 25])),
-            buf: Simulation::new(Grid::from_vec(vec![vec![GOLCell::Dead; 25]; 25])),
+            sim: Simulation::new(Grid::from_vec(vec![vec![GOLCell::Dead; 25]; 25]), 20),
+            buf: Simulation::new(Grid::from_vec(vec![vec![GOLCell::Dead; 25]; 25]), 20),
             current_read: 0,
+        }
+    }
+}
+
+#[derive(Clone)]
+pub enum SnakeCell {
+    Head,
+    Body,
+    Apple,
+    Empty,
+}
+#[derive(Clone)]
+pub enum SnakeHeadDir {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+#[derive(Clone)]
+pub struct Snake {
+    pub game: Game<SnakeCell>,
+    pub length: usize,
+    pub snake: VecDeque<(usize, usize)>,
+    pub facing: SnakeHeadDir,
+}
+
+impl Snake {
+    pub fn new() -> Snake {
+        Snake {
+            game: Game::new(
+                Simulation::new(Grid::from_vec(vec![vec![SnakeCell::Empty; 25]; 25]), 20),
+                2,
+            ),
+            length: 1,
+            snake: VecDeque::new(),
+            facing: SnakeHeadDir::Up,
         }
     }
 }

@@ -4,7 +4,7 @@ use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 
 //noinspection ALL
 pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
-    if event::poll(core::time::Duration::from_millis(250))? {
+    if event::poll(core::time::Duration::from_millis(16))? {
         let reading = event::read()?;
         if app.current_menu == CurrentMenu::Right {
             match reading {
