@@ -172,12 +172,6 @@ impl MenuItem {
             MenuItem::ActiveGame(ActiveGame::Snake(_)) => NAMES[2],
         }
     }
-    pub fn step_tick(&mut self) -> bool {
-        match self {
-            MenuItem::ActiveGame(game) => game.step_tick(),
-            MenuItem::ActiveSim(sim) => sim.step_tick(),
-        }
-    }
 }
 
 impl ActiveSim {
@@ -210,6 +204,15 @@ pub fn select_item(index: usize) -> Option<MenuItem> {
 pub enum MenuItem {
     ActiveGame(ActiveGame),
     ActiveSim(ActiveSim),
+}
+
+impl MenuItem {
+    pub fn step_tick(&mut self) -> bool {
+        match self {
+            MenuItem::ActiveGame(game) => game.step_tick(),
+            MenuItem::ActiveSim(sim) => sim.step_tick(),
+        }
+    }
 }
 
 #[derive(Clone, Copy, PartialEq)]
