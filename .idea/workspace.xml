@@ -11,13 +11,8 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="chore: CI/CD">
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="feat: implement snake.rs, fixes #2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io/tui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/tui.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logic/gameoflife.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/gameoflife.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logic/snake.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/snake.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logic/tictactoe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/tictactoe.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/storage/typedef.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/storage/typedef.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,7 +168,9 @@
     <MESSAGE value="refactor: fixes #3(changelogs in issue desc)" />
     <MESSAGE value="chore: CI/CD" />
     <MESSAGE value="fix: tictactoe.rs draw checking for output" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: tictactoe.rs draw checking for output" />
+    <MESSAGE value="fix: inputs registering even though no current game is active" />
+    <MESSAGE value="feat: implement snake.rs, fixes #2" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: implement snake.rs, fixes #2" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

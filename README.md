@@ -4,7 +4,7 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/Sheriff332/TUIcade/rust.yml)](https://github.com/Sheriff332/TUIcade/actions)
 
 ## Game list:
-✅ TicTacToe
+✅ TicTacToe ✅ Snake
 🟥 (More coming soon!)
 
 ## Simulation list:
