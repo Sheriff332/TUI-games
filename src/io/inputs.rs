@@ -40,8 +40,8 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
         if app.current_menu == CurrentMenu::Left {
             match reading {
                 Event::Key(key) if key.kind == KeyEventKind::Press => match key.code {
-                    KeyCode::Down => app.list_state.select_next(),
-                    KeyCode::Up => app.list_state.select_previous(),
+                    KeyCode::Down | KeyCode::Char('j') => app.list_state.select_next(),
+                    KeyCode::Up | KeyCode::Char('k') => app.list_state.select_previous(),
                     KeyCode::Enter => {
                         if let Some(index) = app.list_state.selected() {
                             app.current_item = select_item(index);
