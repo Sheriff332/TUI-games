@@ -116,18 +116,6 @@ impl<T> Game<T> {
 
 #[enum_dispatch]
 pub trait Playable: Simulable {
-    fn step_turn(&mut self, action: &[KeyCode]) -> Result<i32, &str> {
-        let inputs = self.handle_input(action);
-        if inputs.is_empty() {
-            return Err("Invalid Input");
-        } //input checking
-        self.win_condition(&inputs);
-        if !self.step() {
-            let winner = self.winner();
-            return Ok(winner as i32);
-        }
-        Ok(-1)
-    }
     fn win_condition(&mut self, inputs: &[u32]);
     fn winner(&self) -> usize;
     fn current_player(&self) -> Option<usize> {
@@ -137,11 +125,9 @@ pub trait Playable: Simulable {
 
 #[enum_dispatch]
 pub trait Simulable {
-    fn step(&mut self) -> bool; //the bool states if the sim is stepping (false if over)
-    fn step_tick(&mut self) -> bool {
-        false
-    }
-    fn handle_input(&mut self, _: &[KeyCode]) -> Vec<u32>; //in Simulable for initial state
+    fn step_tick(&mut self);
+    fn parse_input(&mut self, action: &mut Vec<KeyCode>) -> Option<Vec<u32>>;
+    fn handle_input(&mut self, _: Vec<u32>); //in Simulable for initial state
     fn display(&self) -> Text<'_>;
     fn help_text(&self) -> &'static str;
     fn dt(&self, row: usize, col: usize) -> String; //display translate, basically match
@@ -185,6 +171,31 @@ impl ActiveSim {
             ActiveSim::GameOfLife(s) => s.sim.auto_run = !s.sim.auto_run,
         }
     }
+    pub fn tickinfo(&self) -> (usize, usize) {
+        match self {
+            ActiveSim::GameOfLife(s) => (s.sim.ticks, s.sim.ticks_per_step),
+        }
+    }
+    pub fn settps(&mut self, tps: usize) {
+        match self {
+            ActiveSim::GameOfLife(s) => s.sim.ticks_per_step = tps,
+        }
+    }
+}
+
+impl ActiveGame {
+    pub fn tickinfo(&self) -> (usize, usize) {
+        match self {
+            ActiveGame::TicTacToe(g) => (g.game.sim.ticks, g.game.sim.ticks_per_step),
+            ActiveGame::Snake(g) => (g.game.sim.ticks, g.game.sim.ticks_per_step),
+        }
+    }
+    pub fn settps(&mut self, tps: usize) {
+        match self {
+            ActiveGame::TicTacToe(g) => g.game.sim.ticks_per_step = tps,
+            ActiveGame::Snake(g) => g.game.sim.ticks_per_step = tps,
+        }
+    }
 }
 
 pub fn select_item(index: usize) -> Option<MenuItem> {
@@ -207,10 +218,28 @@ pub enum MenuItem {
 }
 
 impl MenuItem {
-    pub fn step_tick(&mut self) -> bool {
+    pub fn step_tick(&mut self) {
         match self {
             MenuItem::ActiveGame(game) => game.step_tick(),
             MenuItem::ActiveSim(sim) => sim.step_tick(),
+        }
+    }
+    pub fn parse_input(&mut self, app: &mut Vec<KeyCode>) -> Option<Vec<u32>> {
+        match self {
+            MenuItem::ActiveGame(game) => game.parse_input(app),
+            MenuItem::ActiveSim(sim) => sim.parse_input(app),
+        }
+    }
+    pub fn tickinfo(&self) -> (usize, usize) {
+        match self {
+            MenuItem::ActiveGame(game) => game.tickinfo(),
+            MenuItem::ActiveSim(sim) => sim.tickinfo(),
+        }
+    }
+    pub fn settps(&mut self, tps: usize) {
+        match self {
+            MenuItem::ActiveGame(g) => g.settps(tps),
+            MenuItem::ActiveSim(s) => s.settps(tps),
         }
     }
 }
@@ -266,7 +295,7 @@ impl GameOfLife {
 
 #[derive(Clone)]
 pub enum SnakeCell {
-    Head,
+    Head(SnakeHeadDir),
     Body,
     Apple,
     Empty,

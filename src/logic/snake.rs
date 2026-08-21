@@ -3,11 +3,7 @@ use crossterm::event::KeyCode;
 use ratatui::prelude::Text;
 
 impl Playable for Snake {
-    fn step_turn(&mut self, action: &[KeyCode]) -> Result<i32, &str> {
-        todo!()
-    }
-
-    fn win_condition(&mut self, inputs: &[u32]) {
+    fn win_condition(&mut self, _inputs: &[u32]) {
         todo!()
     }
 
@@ -21,11 +17,15 @@ impl Playable for Snake {
 }
 
 impl Simulable for Snake {
-    fn step(&mut self) -> bool {
+    fn step_tick(&mut self) {
         todo!()
     }
 
-    fn handle_input(&mut self, _: &[KeyCode]) -> Vec<u32> {
+    fn parse_input(&mut self, _app: &mut Vec<KeyCode>) -> Option<Vec<u32>> {
+        todo!()
+    }
+
+    fn handle_input(&mut self, _: Vec<u32>) {
         todo!()
     }
 
@@ -37,7 +37,7 @@ impl Simulable for Snake {
         todo!()
     }
 
-    fn dt(&self, row: usize, col: usize) -> String {
+    fn dt(&self, _row: usize, _col: usize) -> String {
         todo!()
     }
 

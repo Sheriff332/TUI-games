@@ -3,13 +3,13 @@ use crossterm::event::KeyCode;
 use ratatui::prelude::Text;
 
 impl Simulable for GameOfLife {
-    fn step(&mut self) -> bool {
+    fn step_tick(&mut self) {
         if !self.sim.auto_run {
-            return false; // Toggle is off, do nothing
+            return; // Toggle is off, do nothing
         }
         if self.is_over() {
             self.reset();
-            return false;
+            return;
         }
         for i in 0..25usize {
             for j in 0..25usize {
@@ -42,22 +42,21 @@ impl Simulable for GameOfLife {
         }
         self.sim.step += 1;
         self.buf.step += 1;
+        self.sim.ticks += 1;
+        self.buf.ticks += 1;
         std::mem::swap(&mut self.buf.grid, &mut self.sim.grid);
-        true
     }
 
-    fn step_tick(&mut self) -> bool {
-        if !self.sim.auto_run {
-            return false;
-        }
-        self.step()
-    }
-
-    fn handle_input(&mut self, action: &[KeyCode]) -> Vec<u32> {
-        if !self.sim.auto_run {
-            if action.is_empty() {
-                return vec![0];
-            }
+    fn parse_input(&mut self, action: &mut Vec<KeyCode>) -> Option<Vec<u32>> {
+        if action.len() == 1 && action.last().unwrap() == &KeyCode::Enter {
+            self.sim.auto_run = !self.sim.auto_run;
+            action.clear();
+            return None;
+        } else if action.len() >= 4
+            && action.len() <= 6
+            && action.last().unwrap() == &KeyCode::Enter
+        {
+            action.pop();
             if let Some(s) = action
                 .iter()
                 .map(|x| {
@@ -70,21 +69,29 @@ impl Simulable for GameOfLife {
                 let a = iter.next().unwrap_or(0);
                 let b = iter.next().unwrap_or(0);
                 return if iter.next().is_none() && a > 0 && b > 0 && a <= 25 && b <= 25 {
-                    let cell = match self.sim.grid.get(a as usize - 1, b as usize - 1).unwrap() {
-                        GOLCell::Dead => GOLCell::Alive,
-                        GOLCell::Alive => GOLCell::Dead,
-                    };
-                    self.sim
-                        .grid
-                        .set(a as usize - 1, b as usize - 1, cell)
-                        .expect("Failed to set cell");
-                    vec![a, b]
+                    Some(vec![a, b])
                 } else {
-                    Vec::new()
+                    None
                 };
             }
         }
-        Vec::new()
+        None
+    }
+
+    fn handle_input(&mut self, action: Vec<u32>) {
+        let cell = match self
+            .sim
+            .grid
+            .get(action[0] as usize - 1, action[1] as usize - 1)
+            .unwrap()
+        {
+            GOLCell::Dead => GOLCell::Alive,
+            GOLCell::Alive => GOLCell::Dead,
+        };
+        self.sim
+            .grid
+            .set(action[0] as usize - 1, action[1] as usize - 1, cell)
+            .expect("Failed to set cell");
     }
 
     fn display(&self) -> Text<'_> {

@@ -63,22 +63,23 @@ impl Playable for TicTacToe {
 }
 
 impl Simulable for TicTacToe {
-    fn step(&mut self) -> bool {
+    fn step_tick(&mut self) {
         if self.is_over() {
-            return false;
+            return;
         }
-        self.game.cycle_player();
-        self.piece = match self.piece {
-            TripleT::X => TripleT::O,
-            TripleT::O => TripleT::X,
-            _ => TripleT::Empty,
-        };
-        self.game.sim.step += 1;
-        true
+        self.game.sim.ticks += 1;
     }
 
-    fn handle_input(&mut self, action: &[KeyCode]) -> Vec<u32> {
-        if action.len() == 2
+    fn parse_input(&mut self, action: &mut Vec<KeyCode>) -> Option<Vec<u32>> {
+        if action.len() == 1 && action.last().unwrap() == &KeyCode::Enter {
+            if self.is_over() {
+                action.clear();
+                self.reset();
+                return None;
+            }
+        }
+        if action.len() == 3
+            && action.last().unwrap() == &KeyCode::Enter
             && let KeyCode::Char(r) = action[0]
             && let Some(row) = r.to_digit(10)
             && let KeyCode::Char(c) = action[1]
@@ -87,18 +88,31 @@ impl Simulable for TicTacToe {
             && col > 0
             && self.game.sim.grid.get(row as usize - 1, col as usize - 1) == Some(&TripleT::Empty)
         {
-            match self
-                .game
-                .sim
-                .grid
-                .set(row as usize - 1, col as usize - 1, self.piece)
-            {
-                Ok(_) => {}
-                Err(_) => return Vec::new(),
-            }
-            vec![row, col]
+            Some(vec![row, col])
         } else {
-            Vec::new()
+            None
+        }
+    }
+
+    fn handle_input(&mut self, input: Vec<u32>) {
+        match self
+            .game
+            .sim
+            .grid
+            .set(input[0] as usize - 1, input[1] as usize - 1, self.piece)
+        {
+            _ => {}
+        }
+        self.win_condition(&input);
+
+        if !self.is_over() {
+            self.game.cycle_player();
+            self.piece = match self.piece {
+                TripleT::X => TripleT::O,
+                TripleT::O => TripleT::X,
+                _ => TripleT::X,
+            };
+            self.game.sim.step += 1;
         }
     }
     fn display(&self) -> Text<'_> {

@@ -1,9 +1,11 @@
+use crate::storage::typedef::MenuItem;
+use crate::storage::typedef::Simulable;
 use crate::storage::typedef::{App, CurrentMenu, select_item};
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 
 //noinspection ALL
 pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
-    if event::poll(core::time::Duration::from_millis(16))? {
+    if event::poll(std::time::Duration::ZERO)? {
         let reading = event::read()?;
         if app.current_menu == CurrentMenu::Right {
             match reading {
@@ -12,38 +14,25 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
                         app.current_item = None;
                         app.current_menu = CurrentMenu::Left;
                     }
-                    // KeyCode::Backspace => {
-                    //     app.keys.pop();
-                    // }
-                    // KeyCode::Enter => {
-                    //     if let Some(item) = app.current_item.as_mut() {
-                    //         match item {
-                    //             MenuItem::ActiveGame(game) => {
-                    //                 if game.is_over() {
-                    //                     game.reset();
-                    //                 } else {
-                    //                     let _ = game.step_turn(&app.keys);
-                    //                 }
-                    //             }
-                    //             MenuItem::ActiveSim(sim) => {
-                    //                 if sim.is_running() {
-                    //                     sim.toggle_running();
-                    //                 } else {
-                    //                     if app.keys.is_empty() {
-                    //                         sim.toggle_running();
-                    //                     } else {
-                    //                         sim.handle_input(&app.keys);
-                    //                     }
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    //     app.keys.clear();
-                    // }
-                    // KeyCode::Char(ch) => {
-                    //     app.keys.push(KeyCode::Char(ch));
-                    // }
-                    _ => {}
+                    KeyCode::Backspace => {
+                        app.keys.pop();
+                    }
+                    key => {
+                        app.keys.push(key);
+                        if let Some(item) = app.current_item.as_mut() {
+                            if let Some(input) = item.parse_input(&mut app.keys) {
+                                match item {
+                                    MenuItem::ActiveSim(sim) => {
+                                        sim.handle_input(input);
+                                    }
+                                    MenuItem::ActiveGame(game) => {
+                                        game.handle_input(input);
+                                    }
+                                }
+                                app.keys.clear();
+                            }
+                        }
+                    }
                 },
                 _ => {}
             }
