@@ -7,18 +7,34 @@ use ratatui::layout::Constraint::Length;
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, ListItem, Paragraph};
 use ratatui::widgets::{Clear, List};
+use std::time::{Duration, Instant};
 
 impl App {
     pub fn run(&mut self, term: &mut ratatui::DefaultTerminal) -> std::io::Result<()> {
+        let target_frame_time = Duration::from_secs_f32(1.0 / 60.0); // ~16.6ms
+        let mut last_instant = Instant::now();
+        let mut accumulator = Duration::ZERO;
         while !self.exit {
-            (*term).draw(|frame| {
+            let frame_start = Instant::now();
+            let delta = frame_start.duration_since(last_instant);
+            last_instant = frame_start;
+            accumulator += delta.min(Duration::from_millis(100));
+            (term).draw(|frame| {
                 frame.render_widget(&mut *self, frame.area());
             })?;
             if handle_events(self)? {
                 break;
             }
             if let Some(item) = &mut self.current_item {
-                item.step_tick();
+                let step_duration = target_frame_time * item.tickinfo().1.max(1) as u32;
+                while accumulator >= step_duration {
+                    item.step_tick();
+                    accumulator -= step_duration;
+                }
+            }
+            let frame_elapsed = frame_start.elapsed();
+            if let Some(sleep_duration) = target_frame_time.checked_sub(frame_elapsed) {
+                std::thread::sleep(sleep_duration);
             }
         }
         Ok(())
