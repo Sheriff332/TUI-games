@@ -1,6 +1,7 @@
 use crate::storage::grid::Grid;
 use crossterm::event::KeyCode;
 use enum_dispatch::enum_dispatch;
+use rand::RngExt;
 use ratatui::prelude::*;
 use ratatui::widgets::ListState;
 use std::collections::VecDeque;
@@ -74,10 +75,10 @@ impl CurrentMenu {
 #[derive(Clone)]
 pub struct Simulation<T> {
     pub grid: Grid<T>,
-    pub step: usize,
+    pub step: usize, //for turn based
     pub completed: bool,
     pub auto_run: bool,
-    pub ticks: usize,
+    pub ticks: usize, //for real time
     pub ticks_per_step: usize,
 }
 
@@ -293,9 +294,9 @@ impl GameOfLife {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum SnakeCell {
-    Head(SnakeHeadDir),
+    Head,
     Body,
     Apple,
     Empty,
@@ -310,21 +311,22 @@ pub enum SnakeHeadDir {
 #[derive(Clone)]
 pub struct Snake {
     pub game: Game<SnakeCell>,
-    pub length: usize,
     pub snake: VecDeque<(usize, usize)>,
     pub facing: SnakeHeadDir,
+    pub apple: (usize, usize),
 }
 
 impl Snake {
     pub fn new() -> Snake {
+        let mut rng = rand::rng();
         Snake {
             game: Game::new(
                 Simulation::new(Grid::from_vec(vec![vec![SnakeCell::Empty; 25]; 25]), 20),
                 2,
             ),
-            length: 1,
-            snake: VecDeque::new(),
-            facing: SnakeHeadDir::Up,
+            snake: VecDeque::from(vec![(12, 12)]),
+            facing: SnakeHeadDir::Right,
+            apple: (rng.random_range(0..25), rng.random_range(0..25)),
         }
     }
 }

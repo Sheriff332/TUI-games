@@ -71,7 +71,7 @@ impl Simulable for TicTacToe {
     }
 
     fn parse_input(&mut self, action: &mut Vec<KeyCode>) -> Option<Vec<u32>> {
-        if action.len() == 1 && action.last().unwrap() == &KeyCode::Enter && self.is_over() {
+        if action.len() == 1 && action[0] == KeyCode::Enter && self.is_over() {
             action.clear();
             self.reset();
             return None;

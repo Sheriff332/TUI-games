@@ -1,5 +1,5 @@
 use crate::io::inputs::handle_events;
-use crate::storage::typedef::App;
+use crate::storage::typedef::{ActiveGame, App};
 use crate::storage::typedef::{CurrentMenu, NAMES, Simulable};
 use crate::storage::typedef::{MenuItem, Playable};
 use chrono::Local;
@@ -123,9 +123,19 @@ impl Widget for &mut App {
                     Line::from(format!("Simulation: {}", str)).render(status_iarea, buf);
                 }
                 MenuItem::ActiveGame(game) => {
-                    if let Some(player) = game.current_player() {
-                        Line::from(format!("Current player: Player {}", player + 1))
-                            .render(status_iarea, buf);
+                    if !game.is_over() {
+                        match game {
+                            ActiveGame::TicTacToe(ttt) => {
+                                if let Some(player) = ttt.current_player() {
+                                    Line::from(format!("Current player: Player {}", player + 1))
+                                        .render(status_iarea, buf);
+                                }
+                            }
+                            ActiveGame::Snake(snek) => {
+                                Line::from(format!("Current score: {}", snek.snake.len() - 1))
+                                    .render(status_iarea, buf);
+                            }
+                        }
                     }
                 }
             }

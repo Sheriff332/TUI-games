@@ -95,16 +95,24 @@ impl Simulable for GameOfLife {
     }
 
     fn display(&self) -> Text<'_> {
-        Text::from(
-            (0..25)
-                .map(|row| {
-                    (0..25)
-                        .map(|col| format!(" {} ", self.dt(row, col)))
-                        .collect::<String>()
-                })
-                .collect::<Vec<_>>()
-                .join("\n"),
-        )
+        let width_chars = 25 * 2 - 1; // 25 columns separated by spaces = 49 chars
+        let top_bottom = format!(" {}", "_".repeat(width_chars));
+
+        let grid = (0..25)
+            .map(|row| {
+                let line = (0..25)
+                    .map(|col| self.dt(row, col).to_string())
+                    .collect::<Vec<_>>()
+                    .join(" ");
+                format!("|{}|", line)
+            })
+            .collect::<Vec<_>>();
+        Text::from(format!(
+            "{}\n{}\n{}",
+            top_bottom,
+            grid.join("\n"),
+            top_bottom
+        ))
     }
 
     fn help_text(&self) -> &'static str {
