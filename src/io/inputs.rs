@@ -19,18 +19,18 @@ pub fn handle_events(app: &mut App) -> std::io::Result<bool> {
                     }
                     key => {
                         app.keys.push(key);
-                        if let Some(item) = app.current_item.as_mut() {
-                            if let Some(input) = item.parse_input(&mut app.keys) {
-                                match item {
-                                    MenuItem::ActiveSim(sim) => {
-                                        sim.handle_input(input);
-                                    }
-                                    MenuItem::ActiveGame(game) => {
-                                        game.handle_input(input);
-                                    }
+                        if let Some(item) = app.current_item.as_mut()
+                            && let Some(input) = item.parse_input(&mut app.keys)
+                        {
+                            match item {
+                                MenuItem::ActiveSim(sim) => {
+                                    sim.handle_input(input);
                                 }
-                                app.keys.clear();
+                                MenuItem::ActiveGame(game) => {
+                                    game.handle_input(input);
+                                }
                             }
+                            app.keys.clear();
                         }
                     }
                 },

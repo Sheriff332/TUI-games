@@ -11,13 +11,10 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="refactor: I couldn't explain this even if I wanted to">
+    <list default="true" id="71896d31-1625-454c-b2ea-a02dee9ab993" name="Changes" comment="refactor: fixes #3(changelogs in issue desc)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/io/inputs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/inputs.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logic/gameoflife.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/gameoflife.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logic/snake.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/snake.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/logic/tictactoe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/tictactoe.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/storage/typedef.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/storage/typedef.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +167,8 @@
     <MESSAGE value="feat: snake.rs init" />
     <MESSAGE value="chore: cleanup" />
     <MESSAGE value="refactor: I couldn't explain this even if I wanted to" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: I couldn't explain this even if I wanted to" />
+    <MESSAGE value="refactor: fixes #3(changelogs in issue desc)" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: fixes #3(changelogs in issue desc)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

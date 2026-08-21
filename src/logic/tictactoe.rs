@@ -71,12 +71,10 @@ impl Simulable for TicTacToe {
     }
 
     fn parse_input(&mut self, action: &mut Vec<KeyCode>) -> Option<Vec<u32>> {
-        if action.len() == 1 && action.last().unwrap() == &KeyCode::Enter {
-            if self.is_over() {
-                action.clear();
-                self.reset();
-                return None;
-            }
+        if action.len() == 1 && action.last().unwrap() == &KeyCode::Enter && self.is_over() {
+            action.clear();
+            self.reset();
+            return None;
         }
         if action.len() == 3
             && action.last().unwrap() == &KeyCode::Enter
@@ -95,14 +93,11 @@ impl Simulable for TicTacToe {
     }
 
     fn handle_input(&mut self, input: Vec<u32>) {
-        match self
+        let _ = self
             .game
             .sim
             .grid
-            .set(input[0] as usize - 1, input[1] as usize - 1, self.piece)
-        {
-            _ => {}
-        }
+            .set(input[0] as usize - 1, input[1] as usize - 1, self.piece);
         self.win_condition(&input);
 
         if !self.is_over() {
