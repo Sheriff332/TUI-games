@@ -122,10 +122,14 @@ impl Simulable for TicTacToe {
                 .collect::<Vec<_>>()
                 .join("\n---------\n")
         } else {
-            format!(
-                "The winner is Player {}!\nPress Enter to play again or Esc to go back.",
-                self.winner()
-            )
+            if self.game.sim.completed {
+                format!(
+                    "The winner is Player {}!\nPress Enter to play again or Esc to go back.",
+                    self.winner()
+                )
+            } else {
+                "The game is a draw!\nPress Enter to play again or Esc to go back.".to_string()
+            }
         };
         Text::from(s)
     }
